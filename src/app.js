@@ -8,8 +8,8 @@ const app = express();
 app.use(cors());
 app.use(json());
 
-const router = Router();
-router.use(authRouterAdmin);
+// const router = Router();
+// router.use(authRouterAdmin);
 
 app.get("/", (req, res) => {
   res.sendStatus(404);
