@@ -12,7 +12,7 @@ const router = Router();
 router.use(authRouterAdmin);
 
 app.get("/", (req, res) => {
-  res.send("Penis");
+  res.sendStatus(404);
 });
 
 app.listen(process.env.PORT, () =>
