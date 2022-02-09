@@ -13,3 +13,5 @@ try {
 } catch (error) {
   console.log(error);
 }
+
+export default db;
