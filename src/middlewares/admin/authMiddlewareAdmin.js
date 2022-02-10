@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 const adminSchema = Joi.object({
-  name: Joi.string().required(),
+  name: Joi.string().min(8).required(),
   email: Joi.string().email().required(),
   password: Joi.string().required(),
 });
