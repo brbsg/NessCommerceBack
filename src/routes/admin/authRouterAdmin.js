@@ -1,8 +1,12 @@
 import { Router } from "express";
-import { signIn } from "../../controllers/admin/authControllerAdmin.js";
+import {
+  signIn,
+  registerAdmin,
+} from "../../controllers/admin/authControllerAdmin.js";
 
 const authRouterAdmin = Router();
 
-authRouterAdmin.post("/sign-in", signIn);
+authRouterAdmin.post("/admin/sign-in", signIn);
+authRouterAdmin.post("/admin/register", registerAdmin);
 
 export default authRouterAdmin;
