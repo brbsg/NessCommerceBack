@@ -7,11 +7,11 @@ export async function signIn(req, res) {
   console.log(req.body);
   try {
     const dbAdmin = await db.collection("admins").findOne({ email });
-    res.send("oi");
     const dbSession = await db
       .collection("admin-sessions")
       .findOne({ userId: dbAdmin._id });
 
+    res.send("oi");
     if (dbSession) {
       await db.collection("admin-sessions").deleteMany({ userId: dbAdmin._id });
     }
