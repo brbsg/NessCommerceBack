@@ -8,6 +8,8 @@ export async function registerProducts(req, res) {
   try {
     Jwt.verify(token, process.env.JWT_SECRET);
 
+    res.send("oi");
+
     const dbSession = db.collection("admin-sessions").findOne({ token });
 
     if (!dbSession) return res.sendStatus(401);
