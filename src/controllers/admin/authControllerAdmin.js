@@ -8,34 +8,34 @@ export async function signIn(req, res) {
 
   res.send("oi").status(200);
 
-  // try {
-  //   const dbAdmin = await db.collection("admins").findOne({ email });
-  //   const dbSession = await db
-  //     .collection("admin-sessions")
-  //     .findOne({ userId: dbAdmin._id });
+  try {
+    const dbAdmin = await db.collection("admins").findOne({ email });
+    const dbSession = await db
+      .collection("admin-sessions")
+      .findOne({ userId: dbAdmin._id });
 
-  //   if (dbSession) {
-  //     await db.collection("admin-sessions").deleteMany({ userId: dbAdmin._id });
-  //   }
+    if (dbSession) {
+      await db.collection("admin-sessions").deleteMany({ userId: dbAdmin._id });
+    }
 
-  //   if (dbAdmin && bcrypt.compareSync(password, dbAdmin.password)) {
-  //     const token = jwt.sign({ name }, process.env.JWT_SECRET, {
-  //       expiresIn: Number(process.env.JWT_EXPIRATION),
-  //     });
+    if (dbAdmin && bcrypt.compareSync(password, dbAdmin.password)) {
+      const token = jwt.sign({ name }, process.env.JWT_SECRET, {
+        expiresIn: Number(process.env.JWT_EXPIRATION),
+      });
 
-  //     await db.collection("admin-sessions").insertOne({
-  //       userId: dbAdmin._id,
-  //       token,
-  //     });
+      await db.collection("admin-sessions").insertOne({
+        userId: dbAdmin._id,
+        token,
+      });
 
-  //     res.send({ name, token }).status(200);
-  //   } else {
-  //     res.sendStatus(401);
-  //   }
-  // } catch (error) {
-  //   console.log(error);
-  //   res.sendStatus(401);
-  // }
+      res.send({ name, token }).status(200);
+    } else {
+      res.sendStatus(401);
+    }
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(401);
+  }
 }
 
 export async function registerAdmin(req, res) {
