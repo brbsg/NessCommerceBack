@@ -2,11 +2,13 @@ import Jwt from "jsonwebtoken";
 import db from "../../db.js";
 
 export async function registerProducts(req, res) {
-  const token = req.headers.authorization;
+  const { authorization } = req.headers;
   const { name, img, price, description } = req.body;
 
+  const token = authorization?.replace("Bearer ", "");
+  if (!token) return res.sendStatus(405);
+
   try {
-    res.send("oi");
     Jwt.verify(token, process.env.JWT_SECRET);
 
     const dbSession = db.collection("admin-sessions").findOne({ token });
