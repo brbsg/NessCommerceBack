@@ -10,11 +10,7 @@ import {
 
 const authRouterAdmin = Router();
 
-authRouterAdmin.post("/admin/sign-in", loginMiddleware, signIn);
-authRouterAdmin.post(
-  "/admin/register/admin",
-  registerMiddleware,
-  registerAdmin
-);
+authRouterAdmin.post("/admin/sign-in", signIn);
+authRouterAdmin.post("/admin/register/admin", registerAdmin);
 
 export default authRouterAdmin;
