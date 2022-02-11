@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import db from "../../db.js";
 
 export async function signIn(req, res) {
-  const { name, email, password } = req.body;
+  const { email, password } = req.body;
   console.log(req.body);
   try {
     const dbAdmin = await db.collection("admins").findOne({ email });
@@ -16,7 +16,7 @@ export async function signIn(req, res) {
     }
 
     if (dbAdmin && bcrypt.compareSync(password, dbAdmin.password)) {
-      const token = jwt.sign({ name }, process.env.JWT_SECRET, {
+      const token = jwt.sign({ name: dbAdmin.name }, process.env.JWT_SECRET, {
         expiresIn: Number(process.env.JWT_EXPIRATION),
       });
 
@@ -25,7 +25,7 @@ export async function signIn(req, res) {
         token,
       });
 
-      res.send({ name, token }).status(200);
+      res.send({ name: dbAdmin.name, token }).status(200);
     } else {
       res.sendStatus(402);
     }
