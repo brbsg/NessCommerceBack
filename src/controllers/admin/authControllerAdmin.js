@@ -28,11 +28,11 @@ export async function signIn(req, res) {
 
       res.send({ name, token }).status(200);
     } else {
-      res.sendStatus(402);
+      res.sendStatus(401);
     }
   } catch (error) {
     console.log(error);
-    res.sendStatus(401);
+    res.sendStatus(402);
   }
 }
 
