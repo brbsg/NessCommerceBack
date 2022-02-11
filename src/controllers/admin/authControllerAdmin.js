@@ -6,8 +6,6 @@ export async function signIn(req, res) {
   const { name, email, password } = req.body;
   console.log(req.body);
 
-  res.send("oi").status(200);
-
   try {
     const dbAdmin = await db.collection("admins").findOne({ email });
     const dbSession = await db
@@ -32,6 +30,7 @@ export async function signIn(req, res) {
     } else {
       res.sendStatus(401);
     }
+    res.send("oi").status(200);
   } catch (error) {
     console.log(error);
     res.sendStatus(401);
