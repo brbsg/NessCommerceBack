@@ -5,8 +5,8 @@ import db from "../../db.js";
 export async function signIn(req, res) {
   const { name, email, password } = req.body;
   console.log(req.body);
-
   try {
+    // res.send("oi");
     const dbAdmin = await db.collection("admins").findOne({ email });
     const dbSession = await db
       .collection("admin-sessions")
@@ -28,9 +28,8 @@ export async function signIn(req, res) {
 
       res.send({ name, token }).status(200);
     } else {
-      res.sendStatus(401);
+      res.sendStatus(402);
     }
-    res.send("oi").status(200);
   } catch (error) {
     console.log(error);
     res.sendStatus(401);
