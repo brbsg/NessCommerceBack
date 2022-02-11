@@ -8,6 +8,7 @@ export async function registerProducts(req, res) {
   const token = authorization?.replace("Bearer ", "");
   if (!token) return res.sendStatus(405);
 
+  console.log(token, req.body);
   try {
     Jwt.verify(token, process.env.JWT_SECRET);
 
