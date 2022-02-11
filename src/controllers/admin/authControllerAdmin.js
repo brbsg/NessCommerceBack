@@ -14,7 +14,6 @@ export async function signIn(req, res) {
     if (dbSession) {
       await db.collection("admin-sessions").deleteMany({ userId: dbAdmin._id });
     }
-    res.send("oi");
 
     if (dbAdmin && bcrypt.compareSync(password, dbAdmin.password)) {
       const token = jwt.sign({ name }, process.env.JWT_SECRET, {
@@ -26,6 +25,7 @@ export async function signIn(req, res) {
         token,
       });
 
+      res.send("oi");
       res.send({ name, token }).status(200);
     } else {
       res.sendStatus(402);
