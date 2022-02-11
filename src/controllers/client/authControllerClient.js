@@ -25,7 +25,7 @@ export async function signUpClient(req, res) {
 
   const passwordHash = bcrypt.hashSync(userData.password, 10);
   try {
-      const UserLocate = await db.collection('clients').FindOne({ email: userData.email });
+      const UserLocate = await db.collection('clients').findOne({ email: userData.email });
       if(UserLocate) {
         return res.sendStatus(401); //bad Request => User already exist;
       }
