@@ -4,6 +4,7 @@ import db from "../../db.js";
 
 export async function signIn(req, res) {
   const { name, email, password } = req.body;
+  console.log(req.body);
 
   try {
     const dbAdmin = await db.collection("admins").findOne({ email });

@@ -11,6 +11,7 @@ app.use(json());
 const router = Router();
 router.use(authRouterAdmin);
 router.use(productsRouterAdmin);
+
 app.use(router);
 
 app.listen(process.env.PORT, () =>

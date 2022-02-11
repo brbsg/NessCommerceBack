@@ -4,7 +4,7 @@ import productMiddleware from "../../middlewares/admin/productsMiddlewareAdmin.j
 const productsRouterAdmin = Router();
 
 productsRouterAdmin.post(
-  "/admin/product/register",
+  "/admin/register/product",
   productMiddleware,
   registerProducts
 );

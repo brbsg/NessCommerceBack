@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import Jwt from "jsonwebtoken";
 import db from "../../db.js";
 
 export async function registerProducts(req, res) {
@@ -6,11 +6,13 @@ export async function registerProducts(req, res) {
   const { name, img, price, description } = req.body;
 
   try {
-    jwt.verify(token, process.env.JWT_SECRET);
+    Jwt.verify(token, process.env.JWT_SECRET);
 
     const dbSession = db.collection("admin-sessions").findOne({ token });
 
     if (!dbSession) return res.sendStatus(401);
+
+    await db.collection("products").deleteMany({ name });
 
     await db
       .collection("products")
