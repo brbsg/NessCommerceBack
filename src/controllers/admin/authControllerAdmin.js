@@ -20,8 +20,6 @@ export async function signIn(req, res) {
         expiresIn: Number(process.env.JWT_EXPIRATION),
       });
 
-      res.send("oi");
-
       await db.collection("admin-sessions").insertOne({
         userId: dbAdmin._id,
         token,
