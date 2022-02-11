@@ -6,8 +6,8 @@ export async function signIn(req, res) {
   const { name, email, password } = req.body;
   console.log(req.body);
   try {
-    // res.send("oi");
     const dbAdmin = await db.collection("admins").findOne({ email });
+    res.send("oi");
     const dbSession = await db
       .collection("admin-sessions")
       .findOne({ userId: dbAdmin._id });
@@ -28,11 +28,11 @@ export async function signIn(req, res) {
 
       res.send({ name, token }).status(200);
     } else {
-      res.sendStatus(401);
+      res.sendStatus(402);
     }
   } catch (error) {
     console.log(error);
-    res.sendStatus(402);
+    res.sendStatus(401);
   }
 }
 
