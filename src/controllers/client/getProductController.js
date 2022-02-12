@@ -10,7 +10,7 @@ export async function getAllProducts(_, res) {
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
-}
+  }
 }
 
 export async function getProduct(req, res) {

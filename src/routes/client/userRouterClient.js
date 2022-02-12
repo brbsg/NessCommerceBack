@@ -4,6 +4,6 @@ import { getClient, postConfirmBuy } from "../../controllers/client/userControll
 const userRouterClient = Router();
 
 userRouterClient.get("/user", getClient);
-userRouterClient.post("/client/confirm-buy", postConfirmBuy);
+userRouterClient.post("/confirm-buy", postConfirmBuy);
 
 export default userRouterClient;
