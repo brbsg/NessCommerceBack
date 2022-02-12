@@ -2,10 +2,9 @@ import Jwt from "jsonwebtoken";
 import db from "../../db.js";
 
 export async function registerProducts(req, res) {
-  const { authorization } = req.headers;
+  const token = req.headers.authorization;
   const { name, img, price, amount, description } = req.body;
 
-  const token = authorization?.replace("Bearer ", "");
   if (!token) return res.sendStatus(405);
 
   try {

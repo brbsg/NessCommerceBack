@@ -40,6 +40,7 @@ export async function registerAdmin(req, res) {
   const token = req.headers.authorization;
   const { name, email, password } = req.body; // dados do admin que será cadastrado
 
+  if (!token) return res.sendStatus(405);
   try {
     jwt.verify(token, process.env.JWT_SECRET);
 
