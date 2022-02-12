@@ -47,7 +47,7 @@ export async function signInClient(req, res) {
             token,
           });
     
-        res.send({ token });
+        res.send({ name: user.name, token });
     }else {
         res.sendStatus(402);
     }
