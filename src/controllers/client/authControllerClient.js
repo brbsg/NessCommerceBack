@@ -1,26 +1,10 @@
 import bcrypt from 'bcrypt';
-import { v4 as uuid } from 'uuid';
 import db from "../../db.js";
-import joi from 'joi';
 
 export async function signUpClient(req, res) {
   const userData = req.body; // name, email, password
 
-  const userSchema = joi.object({
-      name: joi.string().required(),
-      email: joi.string().email().required(),
-      password: joi.string().required()
-  });
-
-  const userSchemaValidation = userSchema.validate(
-    userData, 
-    { abortEarly: false }
-  );
-
-  if (userSchemaValidation.error) {
-      console.log(userSchemaValidation.error.details);
-      return res.sendStatus(422);
-  }
+  
 
   const passwordHash = bcrypt.hashSync(userData.password, 10);
   try {
@@ -39,13 +23,6 @@ export async function signUpClient(req, res) {
 
 export async function signInClient(req, res) {
   const { email, password } = req.body;
-
-
-
-      await db.collection("admin-sessions").insertOne({
-        userId: dbAdmin._id,
-        token,
-      });
 
   try {
       const user = await db.collection('clients').findOne({ email });

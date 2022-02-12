@@ -1,3 +1,4 @@
+import Jwt from "jsonwebtoken";
 import db from "../../db.js";
 import dayjs from "dayjs";
 
@@ -10,6 +11,7 @@ export async function getClient(req, res) {
   }
 
   try {
+    Jwt.verify(token, process.env.JWT_SECRET);
     const session = await db.collection("client-sessions").findOne({ token });
     if (!session) {
       return res.sendStatus(404); //Not Found;
@@ -46,37 +48,39 @@ export async function postConfirmBuy(req, res){
   };
 
   try {
-      const session = await db.collection("client-sessions").findOne({ token });  
-      if (!session) {
-          return res.sendStatus(404); //Not Found;
-      }
-      const clientCart = await db.collection("carts").findOne({ userId: session.userId });
-      if(!user) {
-          res.sendStatus(404); // NotFound;
-      }
+    Jwt.verify(token, process.env.JWT_SECRET);
 
-      const replacer = (dayjs().format("YYYY-MM-DD")).replace("-", "/");
+    const session = await db.collection("client-sessions").findOne({ token });  
+    if (!session) {
+        return res.sendStatus(404); //Not Found;
+    }
+    const clientCart = await db.collection("carts").findOne({ userId: session.userId });
+    if(!user) {
+        res.sendStatus(404); // NotFound;
+    }
 
-      const productsID = clientCart.products;
-      let objectProducts = {};
+    const replacer = (dayjs().format("YYYY-MM-DD")).replace("-", "/");
 
-      for(let i=0; i<productsID.length; i++){
-          objectProducts = Object.assign({ _id: productsID[i] }, objectProducts);
-      }
-      const clientProducts = await db.collection("products").findMany(objectProducts).toArray();
+    const productsID = clientCart.products;
+    let objectProducts = {};
 
-      let ProductPrices= 0;
-      for(let i=0; i<clientProducts.length; i++){
-          ProductPrices += Number(clientProducts[i].price);
-      }
+    for(let i=0; i<productsID.length; i++){
+        objectProducts = Object.assign({ _id: productsID[i] }, objectProducts);
+    }
+    const clientProducts = await db.collection("products").findMany(objectProducts).toArray();
 
-      await db.collection("sales").insertOne({
-          userId: clientCart.userId,
-          products: clientCart.products,
-          date: replacer,
-          total: productPrices
-      });
-      res.sendStatus(201); // Created;
+    let ProductPrices= 0;
+    for(let i=0; i<clientProducts.length; i++){
+        ProductPrices += Number(clientProducts[i].price);
+    }
+
+    await db.collection("sales").insertOne({
+        userId: clientCart.userId,
+        products: clientCart.products,
+        date: replacer,
+        total: productPrices
+    });
+    res.sendStatus(201); // Created;
   } catch (error) {
       console.log(error);
       res.sendStatus(500); // Server Error;
