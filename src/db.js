@@ -4,8 +4,6 @@ dotenv.config();
 
 const mongoClient = new MongoClient(process.env.MONGO_URI);
 
-// InternetDBLink= mongodb+srv://ness-commerce:carlosgustavo123@nesscommerce.y0fz8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-
 let db;
 
 try {
