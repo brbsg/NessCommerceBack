@@ -12,3 +12,18 @@ export async function getAllProducts(_, res) {
     res.sendStatus(500);
   }
 }
+
+export async function getProduct(req, res) {
+    const productID = req.params.whatproduct;
+
+    try {
+        const product = await db.collection("products").findOne({_id: productID });
+        if(!product){
+            res.sendStatus(404); //not found;
+        }
+        res.send(product);
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+}

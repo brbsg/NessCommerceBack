@@ -19,8 +19,6 @@ app.use(authRouterClient);
 app.use(productsRouterClient);
 app.use(userRouterClient);
 
-
-
 app.listen(process.env.PORT, () =>
   console.log("Server running on port " + process.env.PORT)
 );

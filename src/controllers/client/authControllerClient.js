@@ -1,27 +1,10 @@
 import bcrypt from 'bcrypt';
-import { v4 as uuid } from 'uuid';
 import db from "../../db.js";
-import joi from 'joi';
 
 export async function signUpClient(req, res) {
-  console.log(req.body);
   const userData = req.body; // name, email, password
 
-  const userSchema = joi.object({
-      name: joi.string().required(),
-      email: joi.string().email().required(),
-      password: joi.string().required()
-  });
-
-  const userSchemaValidation = userSchema.validate(
-    userData, 
-    { abortEarly: false }
-  );
-
-  if (userSchemaValidation.error) {
-      console.log(userSchemaValidation.error.details);
-      return res.sendStatus(422);
-  }
+  
 
   const passwordHash = bcrypt.hashSync(userData.password, 10);
   try {
@@ -39,41 +22,36 @@ export async function signUpClient(req, res) {
 }
 
 export async function signInClient(req, res) {
-  console.log(req.body);
-  const userData = req.body;
-
-  const userSchema = joi.object({
-      email: joi.string().email().required(),
-      password: joi.string().required()
-  });
-
-  const userSchemaValidation = userSchema.validate(
-    userData, 
-    { abortEarly: false }
-  );
-
-  if (userSchemaValidation.error) {
-      console.log(userSchemaValidation.error.details);
-      return res.sendStatus(422);
-  }
+  const { email, password } = req.body;
 
   try {
-      const user = await db.collection('clients').findOne({ email: userData.email });
-  
-      if(!user){
-          return res.sendStatus(404); //notFound
-      }
-      if(!bcrypt.compareSync(userData.password, user.password)) {
-          return res.sendStatus(401) //Unauthorized
-      }
+      const user = await db.collection('clients').findOne({ email });
 
-      const token = uuid();
-      await db.collection("client-sessions").insertOne({
-          userId: user._id,
-          token
-      })
+      const userSession = await db
+      .collection("client-sessions")
+      .findOne({ userId: user._id });
 
-      res.send(token);
+    if (userSession) {
+      await db.collection("client-sessions").deleteMany({ userId: user._id });
+    }
+
+    if (user && bcrypt.compareSync(password, user.password)) {
+        const token = jwt.sign(
+            { name: user.name }, 
+            process.env.JWT_SECRET, 
+            {expiresIn: Number(process.env.JWT_EXPIRATION),}
+        );
+
+        await db.collection("user-sessions").insertOne({
+            userId: user._id,
+            token,
+          });
+    
+        res.send({ name: user.name, token });
+    }else {
+        res.sendStatus(402);
+    }
+
   } catch (error) {
       console.log(error);
       res.sendStatus(500);
