@@ -5,6 +5,7 @@ import db from "../../db.js";
 export async function signIn(req, res) {
   const { email, password } = req.body;
   console.log(req.body);
+
   try {
     const dbAdmin = await db.collection("admins").findOne({ email });
     const dbSession = await db
@@ -59,7 +60,11 @@ export async function registerAdmin(req, res) {
 
       if (checkAdmin) return res.sendStatus(401);
 
-      await db.collection("admins").insertOne({ name, email, password });
+      const passwordHash = bcrypt.hashSync(password, 10);
+
+      await db
+        .collection("admins")
+        .insertOne({ name, email, password: passwordHash });
 
       res.send().status(201);
     } else {
