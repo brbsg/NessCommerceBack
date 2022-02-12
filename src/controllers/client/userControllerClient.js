@@ -21,15 +21,9 @@ export async function getClient(req, res) {
     if (!user) {
       res.sendStatus(404); // NotFound;
     }
-    const ClientCart = await db
-      .collection("carts")
-      .findOne({ _id: session.userId });
-    if (!ClientCart) {
-      res.sendStatus(404); // NotFound;
-    }
+    
     const objectClientData = {
       name: user.name,
-      cart: ClientCart.products,
     };
     res.send(objectClientData);
   } catch (error) {
