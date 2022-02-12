@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import db from "../../db.js";
 
 export async function getAllProducts(_, res) {
@@ -14,16 +15,22 @@ export async function getAllProducts(_, res) {
 }
 
 export async function getProduct(req, res) {
-    const productID = req.params.whatproduct;
+  const productID = req.params.idProduct;
 
-    try {
-        const product = await db.collection("products").findOne({_id: productID });
-        if(!product){
-            res.sendStatus(404); //not found;
-        }
-        res.send(product);
-    } catch (error) {
-        console.log(error);
-        res.sendStatus(500);
+  console.log(productID);
+
+  try {
+    const product = await db
+      .collection("products")
+      .findOne({ _id: new ObjectId(productID) });
+
+    if (!product) {
+      return res.sendStatus(404); //not found;
     }
+
+    res.send(product);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
 }
