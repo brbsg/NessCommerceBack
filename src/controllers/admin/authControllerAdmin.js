@@ -5,6 +5,7 @@ import db from "../../db.js";
 export async function signIn(req, res) {
   const { email, password } = req.body;
   console.log(req.body);
+
   try {
     const dbAdmin = await db.collection("admins").findOne({ email });
     const dbSession = await db
@@ -39,6 +40,7 @@ export async function registerAdmin(req, res) {
   const token = req.headers.authorization;
   const { name, email, password } = req.body; // dados do admin que será cadastrado
 
+  if (!token) return res.sendStatus(405);
   try {
     jwt.verify(token, process.env.JWT_SECRET);
 
@@ -59,7 +61,11 @@ export async function registerAdmin(req, res) {
 
       if (checkAdmin) return res.sendStatus(401);
 
-      await db.collection("admins").insertOne({ name, email, password });
+      const passwordHash = bcrypt.hashSync(password, 10);
+
+      await db
+        .collection("admins")
+        .insertOne({ name, email, password: passwordHash });
 
       res.send().status(201);
     } else {
