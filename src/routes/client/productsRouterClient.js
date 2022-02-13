@@ -1,14 +1,16 @@
 import { Router } from "express";
 import {
   getAllProducts,
+  getCart,
   getProduct,
+  postCart,
 } from "../../controllers/client/getProductController.js";
 
 const productsRouterClient = Router();
 
 productsRouterClient.get("/products", getAllProducts);
-productsRouterClient.get("/products/:idProduct", getProduct);
-productsRouterClient.get("/products/cart", getProduct);
-productsRouterClient.post("/products/cart/:idProduct", getProduct);
+productsRouterClient.get("/products/:productId", getProduct);
+productsRouterClient.get("/cart", getCart);
+productsRouterClient.post("/cart/:productId", postCart);
 
 export default productsRouterClient;

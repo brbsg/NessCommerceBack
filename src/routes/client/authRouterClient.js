@@ -1,7 +1,12 @@
 import { Router } from "express";
-import {signUpClient, signInClient } from "../../controllers/client/authControllerClient.js";
-import { loginMiddleware,
-    registerMiddleware } from "../../middlewares/admin/authMiddlewareAdmin.js";
+import {
+  signUpClient,
+  signInClient,
+} from "../../controllers/client/authControllerClient.js";
+import {
+  loginMiddleware,
+  registerMiddleware,
+} from "../../middlewares/admin/authMiddlewareAdmin.js";
 const authRouterClient = Router();
 
 authRouterClient.post("/client/register", registerMiddleware, signUpClient);
