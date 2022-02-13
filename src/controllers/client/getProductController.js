@@ -40,6 +40,7 @@ export async function postCart(req, res) {
 
     const dbSession = await db.collection("client-sessions").findOne({ token });
 
+    console.log(dbSession);
     await db.collection("carts").insertOne({
       productId: new ObjectId(productId),
       userId: dbSession.userId,
