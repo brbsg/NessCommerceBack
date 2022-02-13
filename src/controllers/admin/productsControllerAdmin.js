@@ -3,7 +3,7 @@ import db from "../../db.js";
 
 export async function registerProducts(req, res) {
   const token = req.headers.authorization;
-  const { name, img, price, amount, description } = req.body;
+  const { name, img, price, amount, category, description } = req.body;
 
   if (!token) return res.sendStatus(405);
 
@@ -18,7 +18,7 @@ export async function registerProducts(req, res) {
 
     await db
       .collection("products")
-      .insertOne({ name, img, price, amount, description });
+      .insertOne({ name, img, price, amount, category, description });
 
     res.sendStatus(200);
   } catch (error) {
