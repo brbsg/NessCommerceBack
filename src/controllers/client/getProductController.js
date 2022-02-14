@@ -29,6 +29,7 @@ export async function getCart(req, res) {
     res.send(cart).status(201);
   } catch (error) {
     console.log(error);
+    res.sendStatus(500);
   }
 }
 
@@ -43,6 +44,28 @@ export async function postCart(req, res) {
 
     console.log(dbSession);
     await db.collection("carts").insertOne({
+      productId: new ObjectId(productId),
+      userId: dbSession.userId,
+    });
+
+    res.sendStatus(201);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(401);
+  }
+}
+
+export async function postRemovefromCart(req, res) {
+  const token = req.headers.authorization;
+  const { productId } = req.params;
+
+  try {
+    Jwt.verify(token, process.env.JWT_SECRET);
+
+    const dbSession = await db.collection("client-sessions").findOne({ token });
+
+    console.log(dbSession);
+    await db.collection("carts").deleteOne({
       productId: new ObjectId(productId),
       userId: dbSession.userId,
     });
