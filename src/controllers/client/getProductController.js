@@ -4,6 +4,7 @@ import db from "../../db.js";
 import dayjs from "dayjs";
 
 export async function getCart(req, res) {
+  console.log("marlon");
   const token = req.headers.authorization;
 
   try {
@@ -25,6 +26,7 @@ export async function getCart(req, res) {
 
       cart.push(auxCart);
     }
+    console.log("charles");
 
     res.send(cart).status(201);
   } catch (error) {
@@ -41,7 +43,14 @@ export async function postCart(req, res) {
 
     const dbSession = await db.collection("client-sessions").findOne({ token });
 
-    console.log(dbSession);
+    console.log(productId);
+
+    const dbProduct = await db.collection("carts").deleteMany({
+      productId: new ObjectId(productId),
+      userId: dbSession.userId,
+    });
+
+    console.log(dbProduct);
     await db.collection("carts").insertOne({
       productId: new ObjectId(productId),
       userId: dbSession.userId,
